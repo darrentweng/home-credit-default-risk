@@ -1,8 +1,0 @@
-# This file keeps the data directory in version control
-# Place your CSV files here:
-# - application_train.csv
-# - bureau.csv
-# - bureau_balance.csv
-# - previous_application.csv
-# - installments_payments.csv
-# - credit_card_balance.csv

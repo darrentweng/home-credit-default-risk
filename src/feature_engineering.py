@@ -35,7 +35,7 @@ def bureau_features(bureau_df: pd.DataFrame, bureau_balance_df: Optional[pd.Data
     # Define aggregations based on available columns
     # Use the correct column name from Kaggle data
     agg_dict = {
-        'SK_BUREAU_ID': 'count',  # Total number of bureau credits (correct column name)
+        'SK_ID_BUREAU': 'count',  # Total number of bureau credits (correct column name)
     }
     
     # Add aggregations for columns that exist
@@ -72,7 +72,7 @@ def bureau_features(bureau_df: pd.DataFrame, bureau_balance_df: Optional[pd.Data
     
     # Rename key columns to match expected names
     column_mapping = {
-        'bureau_count_SK_BUREAU_ID': 'bureau_credit_count',  # Fixed column name
+        'bureau_count_SK_ID_BUREAU': 'bureau_credit_count',  # Fixed column name
         'bureau_mean_AMT_CREDIT_SUM': 'bureau_avg_credit_amount',
         'bureau_max_AMT_CREDIT_MAX_OVERDUE': 'bureau_max_overdue_amount',
         'bureau_sum_AMT_CREDIT_SUM_DEBT': 'bureau_total_debt',
@@ -585,25 +585,9 @@ def merge_all_data(application_df: pd.DataFrame, data_dict: Dict[str, pd.DataFra
                 print("No bureau features generated (empty result)")
         except Exception as e:
             print(f"Error processing bureau features: {e}")
-            print("Adding default bureau features with zero values")
-            # Add default bureau feature columns with zero values
-            default_bureau_cols = [
-                'bureau_credit_count', 'bureau_avg_credit_amount', 'bureau_max_overdue_amount',
-                'bureau_credit_utilization_ratio', 'bureau_active_credit_count', 
-                'bureau_closed_credit_count', 'bureau_avg_days_credit', 'bureau_total_debt'
-            ]
-            for col in default_bureau_cols:
-                merged_df[col] = 0
+            raise Exception(f"Failed to process bureau features: {e}")
     else:
         print("No bureau data available, skipping bureau features")
-        # Add default bureau feature columns with zero values
-        default_bureau_cols = [
-            'bureau_credit_count', 'bureau_avg_credit_amount', 'bureau_max_overdue_amount',
-            'bureau_credit_utilization_ratio', 'bureau_active_credit_count', 
-            'bureau_closed_credit_count', 'bureau_avg_days_credit', 'bureau_total_debt'
-        ]
-        for col in default_bureau_cols:
-            merged_df[col] = 0
     
     # Process previous applications data if available
     if 'previous_application' in data_dict and not data_dict['previous_application'].empty:
